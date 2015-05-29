@@ -1,18 +1,9 @@
 # bench_go
 
-## write vs bufio(every Flush)
-
-|            | real  | user |  sys  |
-|------------|-------|------|-------|
-| Direct     | 37.34 | 3.30 | 32.59 |
-| bufio 4096 | 40.14 | 4.83 | 34.12 |
-| bufio 8192 | 40.96 | 4.80 | 34.92 |
-| bufio 16384| 40.70 | 4.84 | 34.43 |
-
-
-## string vs byte
-
-|        | real  | user  |  sys  |
-|--------|-------|-------|-------|
-|  byte  | 37.34 | 3.30  | 32.59 |
-| string | 51.43 | 12.82 | 37.38 |
+```
+BenchmarkCloseEvery      1000000             10492 ns/op
+BenchmarkByteWrite       5000000              3836 ns/op
+BenchmarkStringWrite     1000000              5225 ns/op
+BenchmarkBufioWrite      2000000              4053 ns/op
+BenchmarkDirectWrite     5000000              3646 ns/op
+```
