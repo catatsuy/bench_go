@@ -6,6 +6,31 @@ import (
 	"testing"
 )
 
+func BenchmarkCloseEvery(b *testing.B) {
+	str := []byte("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+
+	fileName := "tmp.log"
+	ferr := os.Remove(fileName)
+	if ferr != nil {
+		if !os.IsNotExist(ferr) {
+			panic(ferr.Error())
+		}
+	}
+	f, ferr := os.OpenFile(fileName, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0666)
+	defer f.Close()
+	if ferr != nil {
+		panic(ferr.Error())
+	}
+	for i := 0; i < b.N; i++ {
+		byteWrite(f, str)
+		f.Close()
+		f, ferr = os.OpenFile(fileName, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0666)
+		if ferr != nil {
+			panic(ferr.Error())
+		}
+	}
+}
+
 func BenchmarkByteWrite(b *testing.B) {
 	str := []byte("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
 
